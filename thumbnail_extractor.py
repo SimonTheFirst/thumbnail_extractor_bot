@@ -99,9 +99,18 @@ class YoutubeThumbnailExtractor:
         :raises ValueError: Если не удается извлечь id из url
         """
         parsed_url = urlparse(url)
-        if parsed_url.query == '':
-            raise ValueError(f'В url {url} нет id видео.')
-        return parse_qs(parsed_url.query)['v'][0]
+        match parsed_url.netloc:
+            case 'www.youtube.com':
+                if not parsed_url.query:
+                    raise ValueError(f'В url {url} нет id видео')
+                else:
+                    return parse_qs(parsed_url.query)['v'][0]
+                
+            case 'youtu.be':
+                if not parsed_url.path:
+                    raise ValueError(f'В url {url} нет id видео')
+                else:
+                    return parsed_url.path.replace('/', '')
 
     # TODO заменить на обращение к API, чтобы URL не устаревал
     async def extract_thumbnail(self, url):
@@ -154,11 +163,11 @@ class RutubeThumbnailExtractor:
 class ThumbnailExtractorFactory():
     """Фабрика для создания объектов извлекателей обложек."""
     EXTRACTORS = {
-        'vkvideo.ru': VkThumbnailExtractor,
-        'vk.com': VkThumbnailExtractor,
-        'rutube.ru': RutubeThumbnailExtractor,
-        'youtube.com': YoutubeThumbnailExtractor,
-        'youtu.be': YoutubeThumbnailExtractor
+        'vkvideo': VkThumbnailExtractor,
+        'vk': VkThumbnailExtractor,
+        'rutube': RutubeThumbnailExtractor,
+        'youtube': YoutubeThumbnailExtractor,
+        'youtu': YoutubeThumbnailExtractor
     }
 
     @classmethod
