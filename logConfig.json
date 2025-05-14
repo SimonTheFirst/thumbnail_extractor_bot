@@ -1,0 +1,43 @@
+{
+    "version": 1,
+    "formatters": {
+        "default":{
+            "format": "[%(asctime)s] %(name)s - %(levelname)s in %(module)s: %(message)s"
+        },
+        "extended": {
+            "format": "[%(asctime)s] %(name)s - %(levelname)s in %(module)s|L%(lineno)d: %(message)s",
+            "datefmt": "%Y-%m-%dT%H:%M:%S%z"
+        }
+    },
+    "handlers": {
+        "console": {
+            "level": "INFO",
+            "class": "logging.StreamHandler",
+            "stream": "ext://sys.stdout",
+            "formatter": "default"
+        },
+        "file": {
+            "level": "INFO",
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": "logs/thumbnail_extractor.log",
+            "maxBytes": 5242880,
+            "backupCount": 10,
+            "formatter": "extended",
+            "encoding": "utf-8"
+        }
+    },
+    "root": {
+        "level": "INFO",
+        "handlers": ["console"]
+    },
+    "loggers": {
+        "thumbnail_extractor_bot": {
+            "level": "INFO",
+            "handlers": ["file"]
+        },
+        "telegram.ext.Application": {
+            "level": "INFO",
+            "handlers": ["file"]
+        }
+    }
+}
