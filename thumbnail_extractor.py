@@ -12,6 +12,7 @@ from aiohttp import ClientSession, ClientResponseError
 
 @dataclass
 class YoutubeThumbnailSizes:
+    """Класс для хранения данных обложек youtube видео. Формат аттрибутов {'url':.., 'widht':.., 'height':..}"""
     maxres: dict = None
     standard: dict = None
     high: dict = None
@@ -19,6 +20,9 @@ class YoutubeThumbnailSizes:
     default: dict = None
 
     def get_max_available_res(self):
+        """
+        Возвращает самое высокое доступное разрешение обложки
+        """
         for name, value in asdict(self).items():
             if value:
                 return self.__getattribute__(name)['url']
@@ -143,6 +147,9 @@ class YoutubeThumbnailExtractor(ABC):
         return thumbnails.get_max_available_res()
     
 class YoutubeFullUrlThumbnailExtractor(YoutubeThumbnailExtractor):
+    """
+    Класс для извлечения обложки из YouTube, если ссылка в длинном формате
+    """
     def _get_video_id_from_url(self, url: str) -> str | None:
         parsed_url = urlparse(url)
         if not parsed_url.query:
@@ -151,6 +158,9 @@ class YoutubeFullUrlThumbnailExtractor(YoutubeThumbnailExtractor):
             return parse_qs(parsed_url.query)['v'][0]
         
 class YoutubeShortUrlThumbnailExtractor(YoutubeThumbnailExtractor):
+    """
+    Класс для извлечения обложки из YouTube, если ссылка в коротком формате
+    """
     def _get_video_id_from_url(self, url: str) -> str | None:
         parsed_url = urlparse(url)
         if not parsed_url.path:
