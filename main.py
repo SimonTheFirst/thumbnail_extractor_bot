@@ -7,6 +7,7 @@ from telegram import Update
 from telegram.ext import Application, MessageHandler, CommandHandler, filters
 
 from handlers import start, get_thumbnail, error_handler
+from thumbnail_extractor import YoutubeAPI
 
 
 dotenv.load_dotenv()
@@ -21,6 +22,7 @@ def setup_logging():
 
 if __name__ == '__main__':
     setup_logging()
+    YoutubeAPI.configure(os.getenv('YOUTUBE_API_KEY'))
 
     app = Application.builder().token(os.getenv('BOT_API_TOKEN')).build()
     

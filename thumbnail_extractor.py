@@ -1,5 +1,5 @@
 import re
-import os
+import threading
 from dataclasses import dataclass, asdict
 from typing import Protocol
 from urllib.parse import urlparse, parse_qs
@@ -108,6 +108,53 @@ class VkThumbnailExtractor:
                 else:
                     raise VideoDataError(f'Не удалось получить обложки для видео с id {video_id} (пустой список).', json_data)
 
+class YoutubeAPI:
+    """Singleton класс для API YouTube'а"""
+
+    _instance = None
+    _lock = threading.Lock()
+    _api_key = None
+    _client = None
+
+    def __new__(cls):
+        with cls._lock:
+            if cls._instance is None:
+                cls._instance = super().__new__(cls)
+            return cls._instance
+    
+    @classmethod
+    def configure(cls, api_key: str):
+        """
+        Устанавливает API ключ для объекта
+
+        :param api_key: API ключ
+        """
+        if api_key is None:
+            raise ValueError('API ключ пустой')
+        
+        with cls._lock:
+            if cls._api_key is not None:
+                raise RuntimeError('API ключ уже установлен')
+            cls._api_key = api_key
+
+    @property
+    def youtube_client(self):
+        """
+        API клиент для запросов
+        """
+        with self._lock:
+            if self._client is None:
+                if self._api_key is None:
+                    raise RuntimeError('API ключ не установлен. Необходимо вызвать YoutubeAPI.configure()')
+                self._client = build('youtube', 'v3', developerKey=self._api_key)
+        return self._client
+    
+    def __getattr__(self, name):
+        """
+        Пробрасыает все вызовы к этому классу на клиент
+        """
+        return getattr(self.youtube_client, name)
+            
 class YoutubeThumbnailExtractor(ABC):
     """Извлекатель обложек для YouTube."""
 
@@ -127,7 +174,7 @@ class YoutubeThumbnailExtractor(ABC):
         
         :param url: Url видео
         """
-        api_client = build('youtube', 'v3', developerKey=os.getenv('YOUTUBE_API_KEY'))
+        api_client = YoutubeAPI()
         video_id = self._get_video_id_from_url(url)
         request = api_client.videos().list(
             part='snippet',
