@@ -66,7 +66,7 @@ class VkThumbnailExtractor:
         if result:
             return result[0]
         else:
-            raise ValueError(f'Не удалось извлечь id видео по url {url}')
+            raise ValueError(f'Не удалось извлечь id видео из Url {url}.')
 
     async def extract_thumbnail(self, url):
         """
@@ -101,7 +101,7 @@ class VkThumbnailExtractor:
                     raise VideoDataError(f'API не вернул данные для видео с id {video_id}.', json_data)
                 
                 if 'content_restricted' in json_data['response']['items'][0]:
-                    raise VideoDataError(f'Видео с id {video_id} закрыто приватностью.', json_data)
+                    raise VideoDataError(f'Видео с id {video_id} закрыто настройками приватности.', json_data)
 
                 if len(json_data['response']['items'][0]['image']) > 0:
                     return json_data['response']['items'][0]['image'][-1]['url']
@@ -130,11 +130,11 @@ class YoutubeAPI:
         :param api_key: API ключ
         """
         if api_key is None:
-            raise ValueError('API ключ пустой')
+            raise ValueError('API ключ пустой.')
         
         with cls._lock:
             if cls._api_key is not None:
-                raise RuntimeError('API ключ уже установлен')
+                raise RuntimeError('API ключ уже установлен.')
             cls._api_key = api_key
 
     @property
@@ -145,13 +145,13 @@ class YoutubeAPI:
         with self._lock:
             if self._client is None:
                 if self._api_key is None:
-                    raise RuntimeError('API ключ не установлен. Необходимо вызвать YoutubeAPI.configure()')
+                    raise RuntimeError('API ключ не установлен. Необходимо вызвать YoutubeAPI.configure().')
                 self._client = build('youtube', 'v3', developerKey=self._api_key)
         return self._client
     
     def __getattr__(self, name):
         """
-        Пробрасыает все вызовы к этому классу на клиент
+        Пробрасыает все вызовы к этому классу на объект Youtube клиента
         """
         return getattr(self.youtube_client, name)
             
@@ -183,12 +183,12 @@ class YoutubeThumbnailExtractor(ABC):
         response = request.execute()
         items = response.get('items', [])
         if not items:
-            raise ValueError('Видео не найдено')
+            raise ValueError('Видео не найдено.')
         
         snippet = items[0]['snippet']
         thumbnails_dict = snippet.get('thumbnails', {})
         if not thumbnails_dict:
-            raise ValueError('Обложки не найдены')
+            raise ValueError('Обложки не найдены.')
         
         thumbnails = YoutubeThumbnailSizes(**thumbnails_dict)
         return thumbnails.get_max_available_res()
@@ -200,7 +200,7 @@ class YoutubeFullUrlThumbnailExtractor(YoutubeThumbnailExtractor):
     def _get_video_id_from_url(self, url: str) -> str | None:
         parsed_url = urlparse(url)
         if not parsed_url.query:
-            raise ValueError(f'В url {url} нет id видео')
+            raise ValueError(f'В Url {url} нет id видео.')
         else:
             return parse_qs(parsed_url.query)['v'][0]
         
@@ -211,7 +211,7 @@ class YoutubeShortUrlThumbnailExtractor(YoutubeThumbnailExtractor):
     def _get_video_id_from_url(self, url: str) -> str | None:
         parsed_url = urlparse(url)
         if not parsed_url.path:
-            raise ValueError(f'В url {url} нет id видео')
+            raise ValueError(f'В Url {url} нет id видео.')
         else:
             return parsed_url.path.replace('/', '')
         
@@ -273,5 +273,5 @@ class ThumbnailExtractorFactory():
         if domain_name in cls.EXTRACTORS:
             return cls.EXTRACTORS[domain_name]()
         else:
-            raise ValueError(f'Нет извлекателя обложек для доменного имени <{domain_name}>')
+            raise ValueError(f'Нельзя получить обложку для доменного имени <{domain_name}>')
         

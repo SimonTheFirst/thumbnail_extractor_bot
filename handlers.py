@@ -25,7 +25,7 @@ def get_domain_name_from_url(url: str) -> str:
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await update.message.reply_text(
-        'Отправьте ссылку на видео из Youtube/VK/Rututbe, чтобы получить обложку.'
+        'Отправьте ссылку на видео из Youtube/VK/Rutube, чтобы получить обложку.'
     )
 
 async def get_thumbnail(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
