@@ -26,17 +26,17 @@
 
 4. Создать в корне проекта файл <code>.env</code> и записать в него следующие переменные:
 
-    <code>VK_TOKEN = [токен от API VK]  
-    BOT_API_TOKEN = [токен бота от BotFather]  
-    YOUTUBE_API_KEY = [токен доступа к Youtube API v3]  </code>
+    <code>VK_TOKEN = [токен от API VK]</code>  
+    <code>BOT_API_TOKEN = [токен бота от BotFather]</code>  
+    <code>YOUTUBE_API_KEY = [токен доступа к Youtube API v3]</code>
 
 ## Создание Docker образа
 1. Клонировать репозиторий
 2. Создать в корне проекта файл <code>.env</code> и записать в него следующие переменные:
 
-    <code>VK_TOKEN = [токен от API VK]  
-    BOT_API_TOKEN = [токен бота от BotFather]  
-    YOUTUBE_API_KEY = [токен доступа к Youtube API v3]  </code>
+    <code>VK_TOKEN = [токен от API VK]</code>  
+    <code>BOT_API_TOKEN = [токен бота от BotFather]</code>  
+    <code>YOUTUBE_API_KEY = [токен доступа к Youtube API v3]</code>
 
 3. Собрать образ через <code>docker build</code> или написать <code>docker-compose.yml</code>
 
