@@ -1,8 +1,8 @@
 import os
-import dotenv
 import json
 from logging.config import dictConfig
 
+import dotenv
 from telegram import Update
 from telegram.ext import Application, MessageHandler, CommandHandler, filters
 
