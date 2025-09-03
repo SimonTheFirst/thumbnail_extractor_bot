@@ -7,10 +7,12 @@ from telegram import Update
 from telegram.ext import Application, MessageHandler, CommandHandler, filters
 
 from handlers import start, get_thumbnail, error_handler
-from thumbnail_extractor import YoutubeAPI
+from thumbnail_extractors.youtube import set_youtube_api_key
+from thumbnail_extractors.vk import set_vk_api_key
 
 
 dotenv.load_dotenv()
+
 def setup_logging():
     if not os.path.exists('./logs'):
         os.mkdir('logs')
@@ -22,7 +24,16 @@ def setup_logging():
 
 if __name__ == '__main__':
     setup_logging()
-    YoutubeAPI.configure(os.getenv('YOUTUBE_API_KEY'))
+
+    youtube_api_key = os.getenv('YOUTUBE_API_KEY')
+    if youtube_api_key is None:
+        raise ValueError('Нет токена для API YouTube')
+    set_youtube_api_key(youtube_api_key)
+
+    vk_api_key = os.getenv('VK_TOKEN')
+    if vk_api_key is None:
+        raise ValueError('Нет токена для API VK')
+    set_vk_api_key(vk_api_key)
 
     app = Application.builder().token(os.getenv('BOT_API_TOKEN')).build()
     

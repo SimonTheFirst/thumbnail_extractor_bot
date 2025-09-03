@@ -4,14 +4,14 @@ import re
 from telegram import Update
 from telegram.ext import ContextTypes
 
-from thumbnail_extractor import ThumbnailExtractorFactory, APIResponseError, VideoDataError
+from thumbnail_extractors import thumbnail_extractor_factory
+from thumbnail_extractors.vk.exceptions import APIResponseError, VideoDataError
 
 
 logger = logging.getLogger("thumbnail_extractor_bot")
 
 def get_domain_name_from_url(url: str) -> str:
-    """
-    Получает доменное имя по URL
+    """Получает доменное имя по URL
 
     :raises ValueError: Если строка, переданная в качестве параметра url, некорректного формата
     """
@@ -31,8 +31,8 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 async def get_thumbnail(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     try:
         netloc = get_domain_name_from_url(update.message.text)
-        extractor = ThumbnailExtractorFactory.get_extractor(netloc)
-        thumbnail_url = await extractor.extract_thumbnail(update.message.text)
+        extractor = thumbnail_extractor_factory(netloc)
+        thumbnail_url = await extractor(update.message.text)
         await update.message.reply_photo(thumbnail_url)
 
     except (ValueError, APIResponseError, VideoDataError) as e:

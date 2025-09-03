@@ -1,0 +1,1 @@
+from .exctractor import extract_rutube_thumbnail
