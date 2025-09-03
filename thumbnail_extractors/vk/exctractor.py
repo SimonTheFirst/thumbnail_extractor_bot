@@ -4,8 +4,9 @@ from aiohttp import ClientSession
 
 from thumbnail_extractors.vk.exceptions import APIResponseError, VideoDataError
 from thumbnail_extractors.vk.config import get_vk_api_key
-from thumbnail_extractors.vk import API_URL
 
+
+API_URL = 'https://api.vk.ru/method/video.get'
 
 def _get_video_id_from_url(url: str) -> str | None:
     """Получает id видео из url
