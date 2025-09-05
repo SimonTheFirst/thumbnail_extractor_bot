@@ -38,7 +38,7 @@
     <code>BOT_API_TOKEN = [токен бота от BotFather]</code>  
     <code>YOUTUBE_API_KEY = [токен доступа к Youtube API v3]</code>
 
-3. Собрать образ через <code>docker build</code> или написать <code>docker-compose.yml</code>
+3. Собрать образ через <code>docker build</code> или <code>docker compose</code>
 
 # Использование
 1. Запустить бота через <code>python main.py</code> или создать контейнер из образа.
