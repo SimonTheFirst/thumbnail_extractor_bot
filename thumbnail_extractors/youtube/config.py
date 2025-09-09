@@ -21,16 +21,14 @@ def youtube_api_config():
         youtube_api_key = api_key
 
     def build_client() -> None:
-        """Создает объект подключения
-        """
+        """Создает объект подключения"""
         if youtube_api_key is None:
             raise RuntimeError(f'API ключ не установлен!')
         nonlocal youtube_api
         youtube_api = build('youtube', 'v3', developerKey=youtube_api_key)
 
     def get_api() -> Resource:
-        """Возвращает объект подключения
-        """
+        """Возвращает объект подключения"""
         if youtube_api is None:
             build_client()
         return youtube_api

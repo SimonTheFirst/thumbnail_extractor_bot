@@ -13,8 +13,7 @@ class YoutubeThumbnailSizes:
     default: dict = None
 
     def get_max_available_res(self):
-        """Возвращает самое высокое доступное разрешение обложки
-        """
+        """Возвращает самое высокое доступное разрешение обложки"""
         for name, value in asdict(self).items():
             if value:
                 return self.__getattribute__(name)['url']

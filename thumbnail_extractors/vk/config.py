@@ -1,6 +1,5 @@
 def vk_extractor_config():
-    """Конфигурация для запросов данных из API VK 
-    """
+    """Конфигурация для запросов данных из API VK"""
     api_key = None
         
     def set_api_key(key: str):
@@ -12,8 +11,7 @@ def vk_extractor_config():
         api_key = key
 
     def get_api_key():
-        """Возвращает ключ для API VK
-        """
+        """Возвращает ключ для API VK"""
         return api_key
                 
     return set_api_key, get_api_key
