@@ -32,6 +32,9 @@
     <code>VK_TOKEN = [токен от API VK]</code>  
     <code>BOT_API_TOKEN = [токен бота от BotFather]</code>  
     <code>YOUTUBE_API_KEY = [токен доступа к Youtube API v3]</code>
+    
+    Опционально  
+    <code>SENTRY_DSN = [DSN, по которому будут отправляться логи ошибок]</code>
 
 ### Создание Docker образа
 1. Клонировать репозиторий
@@ -40,6 +43,9 @@
     <code>VK_TOKEN = [токен от API VK]</code>  
     <code>BOT_API_TOKEN = [токен бота от BotFather]</code>  
     <code>YOUTUBE_API_KEY = [токен доступа к Youtube API v3]</code>
+    
+    Опционально  
+    <code>SENTRY_DSN = [DSN, по которому будут отправляться логи ошибок]</code>
 
 3. Собрать образ через <code>docker build</code> или <code>docker compose</code>
 

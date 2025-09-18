@@ -9,6 +9,7 @@ from telegram.ext import Application, MessageHandler, CommandHandler, filters
 from handlers import start, get_thumbnail, error_handler
 from thumbnail_extractors.youtube import set_youtube_api_key
 from thumbnail_extractors.vk import set_vk_api_key
+from setup_sentry import setup_sentry
 
 
 dotenv.load_dotenv()
@@ -24,6 +25,7 @@ def setup_logging():
 
 if __name__ == '__main__':
     setup_logging()
+    setup_sentry()
 
     youtube_api_key = os.getenv('YOUTUBE_API_KEY')
     if youtube_api_key is None:
